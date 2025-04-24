@@ -1,7 +1,11 @@
+export const OPENAI_TRANSCRIPTION_MODELS = [
+  'whisper-1',
+  'gpt-4o-mini-transcribe',
+  'gpt-4o-transcribe',
+] as const;
+
 export type OpenAITranscriptionModelId =
-  | 'whisper-1'
-  | 'gpt-4o-mini-transcribe'
-  | 'gpt-4o-transcribe'
+  | (typeof OPENAI_TRANSCRIPTION_MODELS)[number]
   | (string & {});
 
 export type OpenAITranscriptionModelOptions = {

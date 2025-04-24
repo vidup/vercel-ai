@@ -1,7 +1,11 @@
+export const OPENAI_EMBEDDING_MODELS = [
+  'text-embedding-3-small',
+  'text-embedding-3-large',
+  'text-embedding-ada-002',
+] as const;
+
 export type OpenAIEmbeddingModelId =
-  | 'text-embedding-3-small'
-  | 'text-embedding-3-large'
-  | 'text-embedding-ada-002'
+  | (typeof OPENAI_EMBEDDING_MODELS)[number]
   | (string & {});
 
 export interface OpenAIEmbeddingSettings {

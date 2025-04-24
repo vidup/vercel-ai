@@ -1,5 +1,9 @@
 // https://platform.openai.com/docs/models
-export type OpenAICompletionModelId = 'gpt-3.5-turbo-instruct' | (string & {});
+export const OPENAI_COMPLETION_MODELS = ['gpt-3.5-turbo-instruct'] as const;
+
+export type OpenAICompletionModelId =
+  | (typeof OPENAI_COMPLETION_MODELS)[number]
+  | (string & {});
 
 export interface OpenAICompletionSettings {
   /**

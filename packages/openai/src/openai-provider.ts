@@ -12,29 +12,42 @@ import {
   withoutTrailingSlash,
 } from '@ai-sdk/provider-utils';
 import { OpenAIChatLanguageModel } from './openai-chat-language-model';
-import { OpenAIChatModelId, OpenAIChatSettings } from './openai-chat-settings';
+import {
+  OPENAI_CHAT_MODELS,
+  OpenAIChatModelId,
+  OpenAIChatSettings,
+} from './openai-chat-settings';
 import { OpenAICompletionLanguageModel } from './openai-completion-language-model';
 import {
+  OPENAI_COMPLETION_MODELS,
   OpenAICompletionModelId,
   OpenAICompletionSettings,
 } from './openai-completion-settings';
 import { OpenAIEmbeddingModel } from './openai-embedding-model';
 import {
+  OPENAI_EMBEDDING_MODELS,
   OpenAIEmbeddingModelId,
   OpenAIEmbeddingSettings,
 } from './openai-embedding-settings';
 import { OpenAIImageModel } from './openai-image-model';
 import {
+  OPENAI_IMAGE_MODELS,
   OpenAIImageModelId,
   OpenAIImageSettings,
 } from './openai-image-settings';
 import { OpenAITranscriptionModel } from './openai-transcription-model';
-import { OpenAITranscriptionModelId } from './openai-transcription-settings';
+import {
+  OPENAI_TRANSCRIPTION_MODELS,
+  OpenAITranscriptionModelId,
+} from './openai-transcription-settings';
 import { OpenAIResponsesLanguageModel } from './responses/openai-responses-language-model';
 import { OpenAIResponsesModelId } from './responses/openai-responses-settings';
 import { openaiTools } from './openai-tools';
 import { OpenAISpeechModel } from './openai-speech-model';
-import { OpenAISpeechModelId } from './openai-speech-settings';
+import {
+  OPENAI_SPEECH_MODELS,
+  OpenAISpeechModelId,
+} from './openai-speech-settings';
 
 export interface OpenAIProvider extends ProviderV1 {
   (
@@ -132,6 +145,53 @@ Creates a model for speech generation.
 OpenAI-specific tools.
    */
   tools: typeof openaiTools;
+
+  /**
+   * Helper for getting a list of available models.
+   */
+  models: {
+    /**
+     * Get a list of all available models.
+     */
+    getList: () => readonly (
+      | OpenAIChatModelId
+      | OpenAICompletionModelId
+      | OpenAIEmbeddingModelId
+      | OpenAIImageModelId
+      | OpenAITranscriptionModelId
+      | OpenAISpeechModelId
+    )[];
+
+    /**
+     * Get a list of all available chat models.
+     */
+    getChatList: () => readonly OpenAIChatModelId[];
+
+    /**
+     * Get a list of all available completion models.
+     */
+    getCompletionList: () => readonly OpenAICompletionModelId[];
+
+    /**
+     * Get a list of all available embedding models.
+     */
+    getEmbeddingList: () => readonly OpenAIEmbeddingModelId[];
+
+    /**
+     * Get a list of all available image models.
+     */
+    getImageList: () => readonly OpenAIImageModelId[];
+
+    /**
+     * Get a list of all available transcription models.
+     */
+    getTranscriptionList: () => readonly OpenAITranscriptionModelId[];
+
+    /**
+     * Get a list of all available speech models.
+     */
+    getSpeechList: () => readonly OpenAISpeechModelId[];
+  };
 }
 
 export interface OpenAIProviderSettings {
@@ -302,6 +362,41 @@ export function createOpenAI(
     return createLanguageModel(modelId, settings);
   };
 
+  const getModelsList = () => {
+    return [
+      ...OPENAI_CHAT_MODELS,
+      ...OPENAI_COMPLETION_MODELS,
+      ...OPENAI_EMBEDDING_MODELS,
+      ...OPENAI_IMAGE_MODELS,
+      ...OPENAI_TRANSCRIPTION_MODELS,
+      ...OPENAI_SPEECH_MODELS,
+    ];
+  };
+
+  const getChatModelsList = () => {
+    return OPENAI_CHAT_MODELS;
+  };
+
+  const getCompletionModelsList = () => {
+    return OPENAI_COMPLETION_MODELS;
+  };
+
+  const getEmbeddingModelsList = () => {
+    return OPENAI_EMBEDDING_MODELS;
+  };
+
+  const getImageModelsList = () => {
+    return OPENAI_IMAGE_MODELS;
+  };
+
+  const getTranscriptionModelsList = () => {
+    return OPENAI_TRANSCRIPTION_MODELS;
+  };
+
+  const getSpeechModelsList = () => {
+    return OPENAI_SPEECH_MODELS;
+  };
+
   provider.languageModel = createLanguageModel;
   provider.chat = createChatModel;
   provider.completion = createCompletionModel;
@@ -320,6 +415,16 @@ export function createOpenAI(
   provider.speechModel = createSpeechModel;
 
   provider.tools = openaiTools;
+
+  provider.models = {
+    getList: getModelsList,
+    getChatList: getChatModelsList,
+    getCompletionList: getCompletionModelsList,
+    getEmbeddingList: getEmbeddingModelsList,
+    getImageList: getImageModelsList,
+    getTranscriptionList: getTranscriptionModelsList,
+    getSpeechList: getSpeechModelsList,
+  };
 
   return provider as OpenAIProvider;
 }
